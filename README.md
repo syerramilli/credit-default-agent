@@ -27,7 +27,7 @@ enforced in [`guardrails.py`](src/credit_agent/guardrails.py); every
 ```
                     ┌────────────────────┐
                     │    orchestrator     │   plans the pipeline (write_todos),
-                    │  (claude-opus-5)    │   delegates each stage, writes report.md
+                    │  (claude-opus-5)    │   delegates each stage, writes report_<ts>.md
                     └──────────┬──────────┘
              ┌──────────┬──────┴───────┬──────────────┐
              ▼          ▼              ▼              ▼
@@ -68,7 +68,10 @@ python -m credit_agent.cli
 ```
 
 This streams each sub-agent's progress to stdout and writes the final report
-to `outputs/report.md`. Pass a different goal as an argument to steer it, or
+to `outputs/report_<timestamp>.md` — each run gets its own timestamped
+report (and scratch `pipeline_state_<timestamp>.md`), so re-running never
+overwrites a previous run's output. The exact path is also printed at the
+end of the run. Pass a different goal as an argument to steer it, or
 `--quiet` to only print the final message:
 
 ```bash

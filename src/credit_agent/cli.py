@@ -4,13 +4,12 @@ default end-to-end ML goal and streams its progress to stdout."""
 import argparse
 
 from credit_agent.agent import build_orchestrator
-from credit_agent.config import OUTPUTS_DIR
 
 DEFAULT_GOAL = (
     "Run the full ML pipeline end to end: profile the dataset, engineer "
     "features and split it, train at least two different classifier "
     "algorithms, evaluate them on the held-out test set, and write the "
-    "final report to report.md with your model recommendation."
+    "final report with your model recommendation."
 )
 
 
@@ -29,7 +28,7 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    agent = build_orchestrator()
+    agent, report_path = build_orchestrator()
     inputs = {"messages": [{"role": "user", "content": args.goal}]}
 
     if args.quiet:
@@ -46,7 +45,7 @@ def main() -> None:
                     if content:
                         print(f"\n--- {node} ---\n{content}")
 
-    print(f"\nDone. Check {OUTPUTS_DIR}/report.md for the final report.")
+    print(f"\nDone. Check {report_path} for the final report.")
 
 
 if __name__ == "__main__":
