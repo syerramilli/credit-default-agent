@@ -116,7 +116,15 @@ def compare_models(model_names: list[str], test_dataset_name: str) -> dict:
     side, to support picking a winner."""
     summary = {}
     for name in model_names:
-        full = evaluate_model.invoke({"model_name": name, "test_dataset_name": test_dataset_name})
+        try:
+            full = evaluate_model.invoke({"model_name": name, "test_dataset_name": test_dataset_name})
+        except reg.RegistryError as e:
+            # evaluate_model raises (rather than returning {"error": ...}) for
+            # an unknown model/dataset name, so this must be caught here --
+            # one bad name in the list shouldn't fail every other model's
+            # comparison.
+            summary[name] = {"error": str(e)}
+            continue
         if "error" in full:
             summary[name] = full
             continue
