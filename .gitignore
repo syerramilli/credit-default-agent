@@ -1,0 +1,9 @@
+.env
+__pycache__/
+*.pyc
+.venv/
+uv.lock
+data/*.csv
+outputs/
+*.egg-info/
+.DS_Store
